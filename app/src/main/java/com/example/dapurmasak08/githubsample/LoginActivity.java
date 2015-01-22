@@ -19,14 +19,11 @@ public class LoginActivity extends ActionBarActivity {
         ButterKnife.inject(this);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         return true;
     }
-
-
 
     @OnClick(R.id.login_button)
     void onLoginButtonClick() {

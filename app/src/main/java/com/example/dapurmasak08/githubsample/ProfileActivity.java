@@ -4,12 +4,22 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+
+import com.rejasupotaro.octodroid.GitHub;
+import com.rejasupotaro.octodroid.http.Response;
+import com.rejasupotaro.octodroid.http.params.Order;
+import com.rejasupotaro.octodroid.http.params.Sort;
+import com.rejasupotaro.octodroid.models.Repository;
+import com.rejasupotaro.octodroid.models.SearchResult;
+import com.rejasupotaro.octodroid.models.User;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import rx.functions.Action1;
 
 /**
  * Created by dapurmasak08 on 1/22/15.
@@ -22,7 +32,6 @@ public class ProfileActivity extends ActionBarActivity {
         ButterKnife.inject(this);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -33,12 +42,12 @@ public class ProfileActivity extends ActionBarActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                submit(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Toast.makeText(ProfileActivity.this, newText, Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
@@ -55,5 +64,18 @@ public class ProfileActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void submit(String query) {
+        GitHub.client().userAgent("GithubSample"); // request should have a User-Agent header
 
+        GitHub.client().searchUsers(query, Sort.FOLLOWERS, Order.DESC)
+                .subscribe(new Action1<Response<SearchResult<User>>>() {
+                    @Override
+                    public void call(Response<SearchResult<User>> r) {
+                        List<User> users = r.entity().getItems();
+                        for (User user : users) {
+                            Log.e("DEBUG", user.getLogin());
+                        }
+                    }
+                });
+    }
 }
