@@ -12,24 +12,33 @@ import com.rejasupotaro.octodroid.GitHub;
 import com.rejasupotaro.octodroid.http.Response;
 import com.rejasupotaro.octodroid.http.params.Order;
 import com.rejasupotaro.octodroid.http.params.Sort;
-import com.rejasupotaro.octodroid.models.Repository;
 import com.rejasupotaro.octodroid.models.SearchResult;
 import com.rejasupotaro.octodroid.models.User;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
+import rx.Subscription;
 import rx.functions.Action1;
+import rx.subscriptions.Subscriptions;
 
 /**
  * Created by dapurmasak08 on 1/22/15.
  */
 public class ProfileActivity extends ActionBarActivity {
+    private Subscription subscription = Subscriptions.empty();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         ButterKnife.inject(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        subscription.unsubscribe();
+        super.onDestroy();
     }
 
     @Override
@@ -65,7 +74,7 @@ public class ProfileActivity extends ActionBarActivity {
     }
 
     private void submit(String query) {
-        GitHub.client().searchUsers(query, Sort.FOLLOWERS, Order.DESC)
+        subscription = GitHub.client().searchUsers(query, Sort.FOLLOWERS, Order.DESC)
                 .subscribe(new Action1<Response<SearchResult<User>>>() {
                     @Override
                     public void call(Response<SearchResult<User>> r) {
