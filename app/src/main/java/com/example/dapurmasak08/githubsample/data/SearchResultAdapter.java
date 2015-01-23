@@ -1,6 +1,7 @@
 package com.example.dapurmasak08.githubsample.data;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.dapurmasak08.githubsample.ProfileActivity;
 import com.example.dapurmasak08.githubsample.R;
 import com.rejasupotaro.octodroid.GitHub;
 import com.rejasupotaro.octodroid.http.Response;
@@ -77,8 +79,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         // - replace the contents of the view with that element
         User user = dataset.get(position);
         ((SearchResultItemViewHolder) holder).bind(user);
-
-
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -87,7 +87,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         return dataset.size();
     }
 
-    public static class SearchResultItemViewHolder extends RecyclerView.ViewHolder {
+    public static class SearchResultItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private Context context;
         @InjectView(R.id.text) TextView textView;
         @InjectView(R.id.imageView) ImageView imageView;
@@ -103,6 +103,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             super(itemView);
             this.context = itemView.getContext();
             ButterKnife.inject(this, itemView);
+            itemView.setOnClickListener(this);
         }
 
         public void bind(User user) {
@@ -111,6 +112,13 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
                     .load(user.getAvatarUrl())
                     .into(imageView);
             Log.d("Debug User Image URL", user.getAvatarUrl());
+        }
+
+        @Override
+        public void onClick(View view) {
+            Log.d("debug click ", "onClick " + getPosition() + " " + textView.getText());
+            Intent intent = new Intent(context, ProfileActivity.class );
+            context.startActivity(intent);
         }
     }
 }

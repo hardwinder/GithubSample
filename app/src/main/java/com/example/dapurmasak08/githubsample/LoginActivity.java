@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -28,6 +26,7 @@ public class LoginActivity extends ActionBarActivity {
     @OnClick(R.id.login_button)
     void onLoginButtonClick() {
         Intent intent = new Intent(this, ProfileActivity.class );
+
         startActivity(intent);
     }
 }
