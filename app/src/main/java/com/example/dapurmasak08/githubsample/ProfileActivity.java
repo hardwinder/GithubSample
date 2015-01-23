@@ -1,5 +1,6 @@
 package com.example.dapurmasak08.githubsample;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -75,15 +76,9 @@ public class ProfileActivity extends ActionBarActivity {
     }
 
     private void submit(String query) {
-        subscription = AppObservable.bindActivity(this, GitHub.client().searchUsers(query, Sort.FOLLOWERS, Order.DESC))
-                .subscribe(new Action1<Response<SearchResult<User>>>() {
-                    @Override
-                    public void call(Response<SearchResult<User>> r) {
-                        List<User> users = r.entity().getItems();
-                        for (User user : users) {
-                            Log.e("DEBUG", user.getLogin());
-                        }
-                    }
-                });
+        // launch SearchResultActivity with query
+        Intent intent = new Intent(this, SearchResultActivity.class );
+        intent.putExtra("query", query);
+        startActivity(intent);
     }
 }
