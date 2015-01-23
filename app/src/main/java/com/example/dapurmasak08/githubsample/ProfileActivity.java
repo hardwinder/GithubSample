@@ -19,6 +19,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import rx.Subscription;
+import rx.android.app.AppObservable;
 import rx.functions.Action1;
 import rx.subscriptions.Subscriptions;
 
@@ -74,7 +75,7 @@ public class ProfileActivity extends ActionBarActivity {
     }
 
     private void submit(String query) {
-        subscription = GitHub.client().searchUsers(query, Sort.FOLLOWERS, Order.DESC)
+        subscription = AppObservable.bindActivity(this, GitHub.client().searchUsers(query, Sort.FOLLOWERS, Order.DESC))
                 .subscribe(new Action1<Response<SearchResult<User>>>() {
                     @Override
                     public void call(Response<SearchResult<User>> r) {
