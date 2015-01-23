@@ -1,6 +1,5 @@
 package com.example.dapurmasak08.githubsample.data;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -30,7 +29,7 @@ import rx.functions.Action1;
 /**
  * Created by dapurmasak08 on 1/23/15.
  */
-public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.SearchResultItemViewHolder>  {
+public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.SearchResultItemViewHolder> {
 
     private List<User> dataset = new ArrayList<>();
 
@@ -40,6 +39,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView mTextView;
+
         public ViewHolder(TextView v) {
             super(v);
             mTextView = v;
@@ -68,7 +68,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     // Create new views (invoked by the layout manager)
     @Override
     public SearchResultItemViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+                                                         int viewType) {
         return SearchResultItemViewHolder.create(parent);
     }
 
@@ -87,10 +87,12 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         return dataset.size();
     }
 
-    public static class SearchResultItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private Context context;
-        @InjectView(R.id.text) TextView textView;
-        @InjectView(R.id.imageView) ImageView imageView;
+    public static class SearchResultItemViewHolder extends RecyclerView.ViewHolder {
+        private View itemView;
+        @InjectView(R.id.text)
+        TextView textView;
+        @InjectView(R.id.imageView)
+        ImageView imageView;
 
         public static SearchResultItemViewHolder create(ViewGroup parent) {
             // create a new view
@@ -101,24 +103,30 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
         private SearchResultItemViewHolder(View itemView) {
             super(itemView);
-            this.context = itemView.getContext();
+            this.itemView = itemView;
             ButterKnife.inject(this, itemView);
-            itemView.setOnClickListener(this);
         }
 
-        public void bind(User user) {
+        public void bind(final User user) {
             textView.setText(user.getLogin());
-            Picasso.with(context)
+            Picasso.with(itemView.getContext())
                     .load(user.getAvatarUrl())
                     .into(imageView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("debug click ", "onClick " + getPosition() + " " + textView.getText());
+                    Intent intent = new Intent(v.getContext(), ProfileActivity.class);
+                    // serialize
+                    String serializedUser = GsonProvider.get().toJson(user);
+                    intent.putExtra("user", serializedUser);
+                    v.getContext().startActivity(intent);
+                }
+            });
+
             Log.d("Debug User Image URL", user.getAvatarUrl());
         }
-
-        @Override
-        public void onClick(View view) {
-            Log.d("debug click ", "onClick " + getPosition() + " " + textView.getText());
-            Intent intent = new Intent(context, ProfileActivity.class );
-            context.startActivity(intent);
-        }
     }
+
 }

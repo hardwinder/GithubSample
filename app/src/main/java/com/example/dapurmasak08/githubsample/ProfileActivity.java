@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.dapurmasak08.githubsample.data.GsonProvider;
 import com.rejasupotaro.octodroid.models.User;
 
 import butterknife.ButterKnife;
@@ -20,14 +23,21 @@ import rx.subscriptions.Subscriptions;
 public class ProfileActivity extends ActionBarActivity {
     private Subscription subscription = Subscriptions.empty();
     private User user = new User();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        User intentUser = getIntent().getStringExtra("user");
-        if (intentUser != null){
-            user = intentUser;
-
+        String serializedUser = getIntent().getStringExtra("user");
+        if (!TextUtils.isEmpty(serializedUser)) {
+            Log.e("DEBUG", "serializedUser: " + serializedUser);
+            // deserialize
+            user = GsonProvider.get().fromJson(serializedUser, User.class);
+            Log.e("DEBUG", "user: " + user.getLogin());
         }
+//        if (intentUser != null){
+//            user = intentUser;
+//
+//        }
         setContentView(R.layout.activity_profile);
         ButterKnife.inject(this);
     }
@@ -72,7 +82,7 @@ public class ProfileActivity extends ActionBarActivity {
 
     private void submit(String query) {
         // launch SearchResultActivity with query
-        Intent intent = new Intent(this, SearchResultActivity.class );
+        Intent intent = new Intent(this, SearchResultActivity.class);
         intent.putExtra("query", query);
         startActivity(intent);
     }

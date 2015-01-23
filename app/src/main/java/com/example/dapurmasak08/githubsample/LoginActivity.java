@@ -28,8 +28,8 @@ public class LoginActivity extends ActionBarActivity {
     @OnClick(R.id.login_button)
     void onLoginButtonClick() {
         Intent intent = new Intent(this, ProfileActivity.class );
-        User user = null;
-        intent.putExtra("user", user);
+//        User user = null;
+//        intent.putExtra("user", user);
         startActivity(intent);
     }
 }
