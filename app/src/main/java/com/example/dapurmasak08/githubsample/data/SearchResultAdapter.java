@@ -21,6 +21,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import rx.functions.Action1;
 
 /**
@@ -87,8 +89,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
     public static class SearchResultItemViewHolder extends RecyclerView.ViewHolder {
         private Context context;
-        private TextView textView;
-        private ImageView imageView;
+        @InjectView(R.id.text) TextView textView;
+        @InjectView(R.id.imageView) ImageView imageView;
 
         public static SearchResultItemViewHolder create(ViewGroup parent) {
             // create a new view
@@ -100,9 +102,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         private SearchResultItemViewHolder(View itemView) {
             super(itemView);
             this.context = itemView.getContext();
-            this.textView = (TextView) itemView.findViewById(R.id.text);
-            this.imageView = (ImageView) itemView.findViewById(R.id.imageView);
-            // set the view's size, margins, paddings and layout parameters
+            ButterKnife.inject(this, itemView);
         }
 
         public void bind(User user) {
