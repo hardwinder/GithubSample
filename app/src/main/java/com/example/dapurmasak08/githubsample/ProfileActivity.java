@@ -8,6 +8,8 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.rejasupotaro.octodroid.models.User;
+
 import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.subscriptions.Subscriptions;
@@ -17,10 +19,15 @@ import rx.subscriptions.Subscriptions;
  */
 public class ProfileActivity extends ActionBarActivity {
     private Subscription subscription = Subscriptions.empty();
-
+    private User user = new User();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        User intentUser = getIntent().getStringExtra("user");
+        if (intentUser != null){
+            user = intentUser;
+
+        }
         setContentView(R.layout.activity_profile);
         ButterKnife.inject(this);
     }
