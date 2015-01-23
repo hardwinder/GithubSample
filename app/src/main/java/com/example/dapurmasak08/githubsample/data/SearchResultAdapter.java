@@ -1,10 +1,13 @@
 package com.example.dapurmasak08.githubsample.data;
+
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.widget.TextView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.dapurmasak08.githubsample.R;
 import com.rejasupotaro.octodroid.GitHub;
@@ -13,6 +16,7 @@ import com.rejasupotaro.octodroid.http.params.Order;
 import com.rejasupotaro.octodroid.http.params.Sort;
 import com.rejasupotaro.octodroid.models.SearchResult;
 import com.rejasupotaro.octodroid.models.User;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +28,7 @@ import rx.functions.Action1;
  */
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.SearchResultItemViewHolder>  {
 
-    private List<String> dataset = new ArrayList<>();
+    private List<User> dataset = new ArrayList<>();
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -50,7 +54,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
                         List<User> users = r.entity().getItems();
                         dataset.clear();
                         for (User user : users) {
-                            dataset.add(user.getLogin());
+                            dataset.add(user);
                         }
                         notifyDataSetChanged();
                     }
@@ -69,8 +73,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     public void onBindViewHolder(SearchResultItemViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        String item = dataset.get(position);
-        ((SearchResultItemViewHolder) holder).bind(item);
+        User user = dataset.get(position);
+        ((SearchResultItemViewHolder) holder).bind(user);
+
 
     }
 
@@ -81,7 +86,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     }
 
     public static class SearchResultItemViewHolder extends RecyclerView.ViewHolder {
+        private Context context;
         private TextView textView;
+        private ImageView imageView;
 
         public static SearchResultItemViewHolder create(ViewGroup parent) {
             // create a new view
@@ -92,12 +99,18 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
         private SearchResultItemViewHolder(View itemView) {
             super(itemView);
+            this.context = itemView.getContext();
             this.textView = (TextView) itemView.findViewById(R.id.text);
+            this.imageView = (ImageView) itemView.findViewById(R.id.imageView);
             // set the view's size, margins, paddings and layout parameters
         }
 
-        public void bind(String item) {
-            textView.setText(item);
+        public void bind(User user) {
+            textView.setText(user.getLogin());
+            Picasso.with(context)
+                    .load(user.getAvatarUrl())
+                    .into(imageView);
+            Log.d("Debug User Image URL", user.getAvatarUrl());
         }
     }
 }

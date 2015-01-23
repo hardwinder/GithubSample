@@ -5,23 +5,11 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.rejasupotaro.octodroid.GitHub;
-import com.rejasupotaro.octodroid.http.Response;
-import com.rejasupotaro.octodroid.http.params.Order;
-import com.rejasupotaro.octodroid.http.params.Sort;
-import com.rejasupotaro.octodroid.models.SearchResult;
-import com.rejasupotaro.octodroid.models.User;
-
-import java.util.List;
-
 import butterknife.ButterKnife;
 import rx.Subscription;
-import rx.android.app.AppObservable;
-import rx.functions.Action1;
 import rx.subscriptions.Subscriptions;
 
 /**
