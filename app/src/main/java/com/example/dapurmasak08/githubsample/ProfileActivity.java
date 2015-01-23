@@ -65,8 +65,6 @@ public class ProfileActivity extends ActionBarActivity {
     }
 
     private void submit(String query) {
-        GitHub.client().userAgent("GithubSample"); // request should have a User-Agent header
-
         GitHub.client().searchUsers(query, Sort.FOLLOWERS, Order.DESC)
                 .subscribe(new Action1<Response<SearchResult<User>>>() {
                     @Override
