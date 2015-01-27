@@ -118,10 +118,15 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
                 public void onClick(View v) {
                     Log.d("debug click ", "onClick " + getPosition() + " " + textView.getText());
                     Intent intent = new Intent(v.getContext(), ProfileActivity.class);
+
                     // serialize
                     String serializedUser = GsonProvider.get().toJson(user);
+
+                    Log.d("DEBUG User in search result", serializedUser);
+
                     intent.putExtra("user", serializedUser);
                     v.getContext().startActivity(intent);
+
                 }
             });
 

@@ -3,4 +3,103 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:columnCount="2"
+        android:rowCount="3">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/userAvatar"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:maxHeight="100dp"
+            android:maxWidth="100dp"
+            android:minHeight="100dp"
+            android:minWidth="100dp"
+            android:layout_columnSpan="1"
+            android:layout_column="0"
+            android:layout_row="0"
+            android:layout_rowSpan="2">
+        </ImageView>
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_columnSpan="1"
+            android:layout_row="0"
+            android:layout_rowSpan="1"
+            android:text="Halo"
+            android:layout_gravity="fill"
+            android:minHeight="30dp"
+            android:gravity="center_vertical" />
+        <TextView
+            android:id="@+id/loginName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_columnSpan="1"
+            android:layout_row="1"
+            android:layout_rowSpan="1"
+            android:text="Halo"
+            android:layout_gravity="fill"
+            android:minHeight="30dp"
+            android:gravity="center_vertical" />
+        <TextView
+            android:id="@+id/memberSinceDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_columnSpan="1"
+            android:layout_row="2"
+            android:layout_rowSpan="1"
+            android:text="Halo"
+            android:layout_gravity="fill"
+            android:minHeight="30dp"
+            android:gravity="center_vertical" />
+     </GridLayout>
+
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:columnCount="3"
+        android:rowCount="1"
+        android:minHeight="50dp">
+        <TextView
+            android:id="@+id/followerCount"
+            android:layout_column="0"
+            android:layout_columnSpan="1"
+            android:layout_gravity="center|fill_horizontal|left"
+            android:layout_row="0"
+            android:text="Follower Count"
+            android:minWidth="100dp"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/starred"
+            android:layout_column="1"
+            android:layout_columnSpan="1"
+            android:layout_gravity="center|fill_horizontal"
+            android:layout_row="0"
+            android:text="Starred"
+            android:minWidth="100dp"
+            android:gravity="center" />
+        <TextView
+            android:id="@+id/following"
+            android:layout_column="2"
+            android:layout_columnSpan="1"
+            android:layout_gravity="center|fill_horizontal|right|end"
+            android:layout_row="0"
+            android:text="Following"
+            android:minHeight="10dp"
+            android:minWidth="100dp"
+            android:gravity="center" />
+
+        </GridLayout>
+
 </LinearLayout>
