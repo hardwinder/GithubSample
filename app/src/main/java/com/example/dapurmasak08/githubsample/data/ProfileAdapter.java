@@ -72,7 +72,4 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
             Log.d("Debug User Image URL", user.getAvatarUrl());
         }
     }
-
-
-
 }

@@ -2,7 +2,6 @@ package com.example.dapurmasak08.githubsample.data;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,6 +106,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             ButterKnife.inject(this, itemView);
         }
 
+
         public void bind(final User user) {
             textView.setText(user.getLogin());
             Picasso.with(itemView.getContext())
@@ -116,21 +116,13 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("debug click ", "onClick " + getPosition() + " " + textView.getText());
                     Intent intent = new Intent(v.getContext(), ProfileActivity.class);
-
                     // serialize
                     String serializedUser = GsonProvider.get().toJson(user);
-
-                    Log.d("DEBUG User in search result", serializedUser);
-
                     intent.putExtra("user", serializedUser);
                     v.getContext().startActivity(intent);
-
                 }
             });
-
-            Log.d("Debug User Image URL", user.getAvatarUrl());
         }
     }
 

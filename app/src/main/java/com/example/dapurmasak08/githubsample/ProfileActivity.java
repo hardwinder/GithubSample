@@ -6,7 +6,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,12 +13,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.dapurmasak08.githubsample.data.GsonProvider;
+import com.rejasupotaro.octodroid.GitHub;
+import com.rejasupotaro.octodroid.http.Response;
 import com.rejasupotaro.octodroid.models.User;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Subscription;
+import rx.functions.Action1;
 import rx.subscriptions.Subscriptions;
 
 /**
@@ -29,6 +31,7 @@ public class ProfileActivity extends ActionBarActivity {
     private Subscription subscription = Subscriptions.empty();
     private User user = new User();
     private View itemView;
+    private int b = 3;
     @InjectView(R.id.userName)
     TextView userName;
     @InjectView(R.id.loginName)
@@ -55,32 +58,29 @@ public class ProfileActivity extends ActionBarActivity {
         }
 
     }
+    public void updateUI() {
+        GitHub.client().user(user.getLogin())
+                .subscribe(new Action1<Response<User>>() {
+                    @Override
+                    public void call(Response<User> r) {
+                        user = r.entity();
 
+                        userName.setText(user.getName());
+                        loginName.setText(user.getLogin());
+
+                        memberSinceDate.setText(user.getCreatedAt());
+                        followerCount.setText(String.valueOf(user.getFollowers()));
+                        starred.setText(String.valueOf(user.getPublicRepos()));
+                        following.setText(String.valueOf(user.getFollowing()));
+                        Picasso.with(getBaseContext())
+                                .load(user.getAvatarUrl())
+                                .into(userAvatar);
+                    }
+                });
+    }
     private void bind(String serializedUser){
-        Log.e("DEBUG", "serializedUser: " + serializedUser);
-        // deserialize
-
         user = GsonProvider.get().fromJson(serializedUser, User.class);
-        Log.e("DEBUG", "user: " + user.getLogin());
-        userName.setText(user.getName());
-        loginName.setText(user.getLogin());
-        Picasso.with(this.getBaseContext())
-                .load(user.getAvatarUrl())
-                .into(userAvatar);
-        memberSinceDate.setText(user.getCreatedAt());
-        followerCount.setText(String.valueOf(user.getFollowers()));
-        starred.setText(String.valueOf(user.getPublicRepos()));
-        following.setText(String.valueOf(user.getFollowing()));
-        if (user.getName() != null){
-            Log.d("DEBUG user name", user.getName());
-        }
-        if (user.getCreatedAt() != null) {
-            Log.d("DEBUG user created at", user.getCreatedAt());
-        }
-        if (user.getAvatarUrl() != null) {
-            Log.d("DEBUG user created at", user.getAvatarUrl());
-        }
-
+        updateUI();
     }
 
     @Override
@@ -127,4 +127,5 @@ public class ProfileActivity extends ActionBarActivity {
         intent.putExtra("query", query);
         startActivity(intent);
     }
+
 }
