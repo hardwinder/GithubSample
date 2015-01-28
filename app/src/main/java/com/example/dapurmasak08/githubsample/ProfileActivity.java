@@ -46,6 +46,8 @@ public class ProfileActivity extends ActionBarActivity {
     TextView starred;
     @InjectView(R.id.following)
     TextView following;
+    @InjectView(R.id.welcomeMessage)
+    TextView welcomeMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,8 @@ public class ProfileActivity extends ActionBarActivity {
                         Picasso.with(getBaseContext())
                                 .load(user.getAvatarUrl())
                                 .into(userAvatar);
+                        welcomeMessage.setVisibility(View.GONE);
+
                     }
                 });
     }

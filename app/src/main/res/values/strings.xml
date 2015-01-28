@@ -4,4 +4,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_search">Search</string>
     <string name="login">Login</string>
+    <string name="label_member_since">Member since:</string>
+    <string name="label_following">Following</string>
+    <string name="label_starred">Starred</string>
+    <string name="label_follower">Follower</string>
+    <string name="label_repositories">Repositories</string>
+
 </resources>
