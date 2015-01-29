@@ -53,6 +53,12 @@ public class ProfileActivity extends ActionBarActivity {
     TextView following;
     @InjectView(R.id.welcomeMessage)
     TextView welcomeMessage;
+    @InjectView(R.id.followerCountLabel)
+    TextView followerCountLabel;
+    @InjectView(R.id.starredLabel)
+    TextView starredLabel;
+    @InjectView(R.id.followingLabel)
+    TextView followingLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
