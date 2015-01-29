@@ -18,6 +18,11 @@ import com.rejasupotaro.octodroid.http.Response;
 import com.rejasupotaro.octodroid.models.User;
 import com.squareup.picasso.Picasso;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Subscription;
@@ -70,7 +75,11 @@ public class ProfileActivity extends ActionBarActivity {
                         userName.setText(user.getName());
                         loginName.setText(user.getLogin());
 
-                        memberSinceDate.setText(user.getCreatedAt());
+                        DateTimeFormatter parser = ISODateTimeFormat.dateTimeNoMillis();
+                        DateTime dt = parser.parseDateTime(user.getCreatedAt());
+                        DateTimeFormatter formatter = DateTimeFormat.mediumDate();
+                        memberSinceDate.setText(formatter.print(dt));
+
                         followerCount.setText(String.valueOf(user.getFollowers()));
                         starred.setText(String.valueOf(user.getPublicRepos()));
                         following.setText(String.valueOf(user.getFollowing()));
@@ -78,7 +87,6 @@ public class ProfileActivity extends ActionBarActivity {
                                 .load(user.getAvatarUrl())
                                 .into(userAvatar);
                         welcomeMessage.setVisibility(View.GONE);
-
                     }
                 });
     }
