@@ -3,11 +3,13 @@
     <string name="app_name">GithubSample</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_search">Search</string>
-    <string name="login">Login</string>
+    <string name="login">Enter</string>
     <string name="label_member_since">Member since:</string>
     <string name="label_following">Following</string>
     <string name="label_starred">Starred</string>
     <string name="label_follower">Follower</string>
     <string name="label_repositories">Repositories</string>
+    <string name="wait_for_response">Loading profile...</string>
+    <string name="get_started">You may use the search bar above to get started</string>
 
 </resources>

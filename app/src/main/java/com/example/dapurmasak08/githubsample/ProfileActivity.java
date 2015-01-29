@@ -66,6 +66,7 @@ public class ProfileActivity extends ActionBarActivity {
 
     }
     public void updateUI() {
+        welcomeMessage.setText(R.string.wait_for_response);
         GitHub.client().user(user.getLogin())
                 .subscribe(new Action1<Response<User>>() {
                     @Override
