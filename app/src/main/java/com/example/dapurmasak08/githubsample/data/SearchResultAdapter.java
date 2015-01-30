@@ -31,7 +31,6 @@ import rx.functions.Action1;
  * Created by dapurmasak08 on 1/23/15.
  */
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.SearchResultItemViewHolder> {
-
     private List<User> dataset = new ArrayList<>();
     private final Context context;
 
