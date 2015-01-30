@@ -12,4 +12,5 @@
     <string name="wait_for_response">Loading profile...</string>
     <string name="get_started">You may use the search bar above to get started</string>
     <string name="no_search_result">No search result found...</string>
+    <string name="error_message">An error occurred. Please try again later.</string>
 </resources>

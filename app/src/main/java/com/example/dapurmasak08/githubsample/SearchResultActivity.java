@@ -1,44 +1,52 @@
 package com.example.dapurmasak08.githubsample;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.example.dapurmasak08.githubsample.data.SearchResultAdapter;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * Created by dapurmasak08 on 1/23/15.
  */
 public class SearchResultActivity extends Activity {
-    private RecyclerView recyclerView;
+    private static final String EXTRA_QUERY = "extra_query";
+
+    @InjectView(R.id.my_recycler_view)
+    RecyclerView searchResultListView;
+
     private SearchResultAdapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
+
+    public static void launch(Context context, String query) {
+        Intent intent = new Intent(context, SearchResultActivity.class);
+        intent.putExtra(EXTRA_QUERY, query);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result);
-        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        ButterKnife.inject(this);
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        recyclerView.setHasFixedSize(true);
+        adapter = new SearchResultAdapter(searchResultListView);
 
-        // use a linear layout manager
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        // specify an adapter (see also next example)
-        adapter = new SearchResultAdapter(this);
-        recyclerView.setAdapter(adapter);
-
-        String query = getIntent().getStringExtra("query");
+        String query = getIntent().getStringExtra(EXTRA_QUERY);
         submit(query);
+    }
+
+    @Override
+    public void onDestroy() {
+        adapter.destroy();
+        super.onDestroy();
     }
 
     private void submit(String query) {
         adapter.update(query);
     }
-
 }

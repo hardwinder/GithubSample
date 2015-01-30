@@ -1,8 +1,9 @@
 package com.example.dapurmasak08.githubsample.data;
 
 import android.content.Context;
-import android.content.Intent;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.dapurmasak08.githubsample.ProfileActivity;
 import com.example.dapurmasak08.githubsample.R;
+import com.example.dapurmasak08.githubsample.views.DividerItemDecoration;
 import com.rejasupotaro.octodroid.GitHub;
 import com.rejasupotaro.octodroid.http.Response;
 import com.rejasupotaro.octodroid.http.params.Order;
@@ -25,23 +27,32 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Subscription;
 import rx.functions.Action1;
+import rx.subscriptions.Subscriptions;
 
 /**
  * Created by dapurmasak08 on 1/23/15.
  */
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.SearchResultItemViewHolder> {
-
     private List<User> dataset = new ArrayList<>();
     private final Context context;
+    private Subscription subscription = Subscriptions.empty();
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public SearchResultAdapter(Context context) {
-        this.context = context;
+    public SearchResultAdapter(RecyclerView recyclerView) {
+        this.context = recyclerView.getContext();
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.addItemDecoration(new DividerItemDecoration(context));
+
+        recyclerView.setAdapter(this);
     }
 
     public void update(String query) {
-        GitHub.client().searchUsers(query, Sort.FOLLOWERS, Order.DESC)
+        subscription.unsubscribe();
+        subscription = GitHub.client().searchUsers(query, Sort.FOLLOWERS, Order.DESC)
                 .subscribe(new Action1<Response<SearchResult<User>>>() {
                     @Override
                     public void call(Response<SearchResult<User>> r) {
@@ -53,14 +64,19 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
                         notifyDataSetChanged();
                         checkIfEmpty();
                     }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Toast.makeText(context, R.string.error_message, Toast.LENGTH_SHORT).show();
+                        Log.e("DEBUG", throwable.getMessage());
+                    }
                 });
     }
 
     private void checkIfEmpty() {
         if (getItemCount() <= 0) {
-            Toast.makeText( context, R.string.no_search_result, Toast.LENGTH_LONG).show();
-            Intent profile = new Intent(context, ProfileActivity.class);
-            context.startActivity(profile);
+            Toast.makeText(context, R.string.no_search_result, Toast.LENGTH_LONG).show();
+            ProfileActivity.launch(context);
         }
     }
 
@@ -107,7 +123,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             ButterKnife.inject(this, itemView);
         }
 
-
         public void bind(final User user) {
             textView.setText(user.getLogin());
             Picasso.with(itemView.getContext())
@@ -117,14 +132,13 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), ProfileActivity.class);
-                    // serialize
-                    String serializedUser = GsonProvider.get().toJson(user);
-                    intent.putExtra("user", serializedUser);
-                    v.getContext().startActivity(intent);
+                    ProfileActivity.launch(v.getContext(), user);
                 }
             });
         }
     }
 
+    public void destroy() {
+        subscription.unsubscribe();
+    }
 }

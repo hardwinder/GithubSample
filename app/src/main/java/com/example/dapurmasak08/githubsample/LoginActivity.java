@@ -5,11 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 
-import com.rejasupotaro.octodroid.models.User;
-
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 
 public class LoginActivity extends ActionBarActivity {
     @Override
@@ -27,7 +24,7 @@ public class LoginActivity extends ActionBarActivity {
 
     @OnClick(R.id.login_button)
     void onLoginButtonClick() {
-        Intent intent = new Intent(this, ProfileActivity.class );
+        Intent intent = new Intent(this, ProfileActivity.class);
 //        User user = null;
 //        intent.putExtra("user", user);
         startActivity(intent);

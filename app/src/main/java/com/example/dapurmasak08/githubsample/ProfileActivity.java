@@ -1,31 +1,31 @@
 package com.example.dapurmasak08.githubsample;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dapurmasak08.githubsample.data.GsonProvider;
+import com.example.dapurmasak08.githubsample.utils.DateUtils;
 import com.rejasupotaro.octodroid.GitHub;
 import com.rejasupotaro.octodroid.http.Response;
 import com.rejasupotaro.octodroid.models.User;
 import com.squareup.picasso.Picasso;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Subscription;
+import rx.android.app.AppObservable;
 import rx.functions.Action1;
 import rx.subscriptions.Subscriptions;
 
@@ -33,10 +33,10 @@ import rx.subscriptions.Subscriptions;
  * Created by dapurmasak08 on 1/22/15.
  */
 public class ProfileActivity extends ActionBarActivity {
+    private static final String EXTRA_USER = "extra_user";
+
     private Subscription subscription = Subscriptions.empty();
     private User user = new User();
-    private View itemView;
-    private int b = 3;
     @InjectView(R.id.userName)
     TextView userName;
     @InjectView(R.id.loginName)
@@ -60,20 +60,36 @@ public class ProfileActivity extends ActionBarActivity {
     @InjectView(R.id.followingLabel)
     TextView followingLabel;
 
+    public static void launch(Context context) {
+        Intent profile = new Intent(context, ProfileActivity.class);
+        context.startActivity(profile);
+    }
+
+    public static void launch(Context context, User user) {
+        String serializedUser = GsonProvider.get().toJson(user);
+
+        Intent intent = new Intent(context, ProfileActivity.class);
+        intent.putExtra(EXTRA_USER, serializedUser);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String serializedUser = getIntent().getStringExtra("user");
         setContentView(R.layout.activity_profile);
         ButterKnife.inject(this);
-        if (!TextUtils.isEmpty(serializedUser)) {
-           bind(serializedUser);
-        }
 
+        String serializedUser = getIntent().getStringExtra(EXTRA_USER);
+        if (!TextUtils.isEmpty(serializedUser)) {
+            bind(serializedUser);
+        }
     }
+
     public void updateUI() {
         welcomeMessage.setText(R.string.wait_for_response);
-        GitHub.client().user(user.getLogin())
+
+        subscription.unsubscribe();
+        subscription = AppObservable.bindActivity(this, GitHub.client().user(user.getLogin()))
                 .subscribe(new Action1<Response<User>>() {
                     @Override
                     public void call(Response<User> r) {
@@ -82,10 +98,7 @@ public class ProfileActivity extends ActionBarActivity {
                         userName.setText(user.getName());
                         loginName.setText(user.getLogin());
 
-                        DateTimeFormatter parser = ISODateTimeFormat.dateTimeNoMillis();
-                        DateTime dt = parser.parseDateTime(user.getCreatedAt());
-                        DateTimeFormatter formatter = DateTimeFormat.mediumDate();
-                        memberSinceDate.setText(formatter.print(dt));
+                        memberSinceDate.setText(DateUtils.format(user.getCreatedAt()));
 
                         followerCount.setText(String.valueOf(user.getFollowers()));
                         starred.setText(String.valueOf(user.getPublicRepos()));
@@ -95,9 +108,16 @@ public class ProfileActivity extends ActionBarActivity {
                                 .into(userAvatar);
                         welcomeMessage.setVisibility(View.GONE);
                     }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Toast.makeText(ProfileActivity.this, R.string.error_message, Toast.LENGTH_SHORT).show();
+                        Log.e("DEBUG", throwable.getMessage());
+                    }
                 });
     }
-    private void bind(String serializedUser){
+
+    private void bind(String serializedUser) {
         user = GsonProvider.get().fromJson(serializedUser, User.class);
         updateUI();
     }
@@ -135,16 +155,10 @@ public class ProfileActivity extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
         return super.onOptionsItemSelected(item);
     }
 
     private void submit(String query) {
-        // launch SearchResultActivity with query
-        Intent intent = new Intent(this, SearchResultActivity.class);
-        intent.putExtra("query", query);
-        startActivity(intent);
+        SearchResultActivity.launch(this, query);
     }
-
 }
