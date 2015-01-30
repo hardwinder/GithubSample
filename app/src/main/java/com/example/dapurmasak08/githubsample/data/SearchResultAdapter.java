@@ -58,7 +58,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
     private void checkIfEmpty() {
         if (getItemCount() <= 0) {
-            Toast.makeText( context, R.string.no_search_result, Toast.LENGTH_LONG).show();
+            Toast.makeText(context, R.string.no_search_result, Toast.LENGTH_LONG).show();
             Intent profile = new Intent(context, ProfileActivity.class);
             context.startActivity(profile);
         }
@@ -106,7 +106,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             this.itemView = itemView;
             ButterKnife.inject(this, itemView);
         }
-
 
         public void bind(final User user) {
             textView.setText(user.getLogin());

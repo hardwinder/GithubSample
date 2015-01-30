@@ -40,5 +40,4 @@ public class SearchResultActivity extends Activity {
     private void submit(String query) {
         adapter.update(query);
     }
-
 }

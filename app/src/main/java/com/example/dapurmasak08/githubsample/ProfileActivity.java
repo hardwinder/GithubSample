@@ -67,10 +67,11 @@ public class ProfileActivity extends ActionBarActivity {
         setContentView(R.layout.activity_profile);
         ButterKnife.inject(this);
         if (!TextUtils.isEmpty(serializedUser)) {
-           bind(serializedUser);
+            bind(serializedUser);
         }
 
     }
+
     public void updateUI() {
         welcomeMessage.setText(R.string.wait_for_response);
         GitHub.client().user(user.getLogin())
@@ -97,7 +98,8 @@ public class ProfileActivity extends ActionBarActivity {
                     }
                 });
     }
-    private void bind(String serializedUser){
+
+    private void bind(String serializedUser) {
         user = GsonProvider.get().fromJson(serializedUser, User.class);
         updateUI();
     }

@@ -21,6 +21,7 @@ import butterknife.InjectView;
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder> {
     private User user = new User();
     private List<User> dataset = new ArrayList<>();
+
     // Create new views (invoked by the layout manager)
     @Override
     public ProfileViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
