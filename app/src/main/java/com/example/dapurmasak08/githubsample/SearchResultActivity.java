@@ -4,17 +4,21 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.example.dapurmasak08.githubsample.data.SearchResultAdapter;
-import com.example.dapurmasak08.githubsample.views.DividerItemDecoration;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * Created by dapurmasak08 on 1/23/15.
  */
 public class SearchResultActivity extends Activity {
     private static final String EXTRA_QUERY = "extra_query";
+
+    @InjectView(R.id.my_recycler_view)
+    RecyclerView searchResultListView;
 
     private SearchResultAdapter adapter;
 
@@ -28,19 +32,9 @@ public class SearchResultActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        ButterKnife.inject(this);
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        recyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this));
-
-        adapter = new SearchResultAdapter(this);
-        recyclerView.setAdapter(adapter);
+        adapter = new SearchResultAdapter(searchResultListView);
 
         String query = getIntent().getStringExtra(EXTRA_QUERY);
         submit(query);

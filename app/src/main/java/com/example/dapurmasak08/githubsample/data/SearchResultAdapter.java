@@ -1,6 +1,7 @@
 package com.example.dapurmasak08.githubsample.data;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.dapurmasak08.githubsample.ProfileActivity;
 import com.example.dapurmasak08.githubsample.R;
+import com.example.dapurmasak08.githubsample.views.DividerItemDecoration;
 import com.rejasupotaro.octodroid.GitHub;
 import com.rejasupotaro.octodroid.http.Response;
 import com.rejasupotaro.octodroid.http.params.Order;
@@ -38,8 +40,14 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     private Subscription subscription = Subscriptions.empty();
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public SearchResultAdapter(Context context) {
-        this.context = context;
+    public SearchResultAdapter(RecyclerView recyclerView) {
+        this.context = recyclerView.getContext();
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.addItemDecoration(new DividerItemDecoration(context));
+
+        recyclerView.setAdapter(this);
     }
 
     public void update(String query) {
