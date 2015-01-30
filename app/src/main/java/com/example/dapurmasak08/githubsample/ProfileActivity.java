@@ -26,6 +26,7 @@ import org.joda.time.format.ISODateTimeFormat;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Subscription;
+import rx.android.app.AppObservable;
 import rx.functions.Action1;
 import rx.subscriptions.Subscriptions;
 
@@ -71,7 +72,9 @@ public class ProfileActivity extends ActionBarActivity {
 
     public void updateUI() {
         welcomeMessage.setText(R.string.wait_for_response);
-        GitHub.client().user(user.getLogin())
+
+        subscription.unsubscribe();
+        subscription = AppObservable.bindActivity(this, GitHub.client().user(user.getLogin()))
                 .subscribe(new Action1<Response<User>>() {
                     @Override
                     public void call(Response<User> r) {

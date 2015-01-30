@@ -35,6 +35,12 @@ public class SearchResultActivity extends Activity {
         submit(query);
     }
 
+    @Override
+    public void onDestroy() {
+        adapter.destroy();
+        super.onDestroy();
+    }
+
     private void submit(String query) {
         adapter.update(query);
     }

@@ -25,7 +25,9 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Subscription;
 import rx.functions.Action1;
+import rx.subscriptions.Subscriptions;
 
 /**
  * Created by dapurmasak08 on 1/23/15.
@@ -33,6 +35,7 @@ import rx.functions.Action1;
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.SearchResultItemViewHolder> {
     private List<User> dataset = new ArrayList<>();
     private final Context context;
+    private Subscription subscription = Subscriptions.empty();
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public SearchResultAdapter(Context context) {
@@ -40,7 +43,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     }
 
     public void update(String query) {
-        GitHub.client().searchUsers(query, Sort.FOLLOWERS, Order.DESC)
+        subscription.unsubscribe();
+        subscription = GitHub.client().searchUsers(query, Sort.FOLLOWERS, Order.DESC)
                 .subscribe(new Action1<Response<SearchResult<User>>>() {
                     @Override
                     public void call(Response<SearchResult<User>> r) {
@@ -125,4 +129,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         }
     }
 
+    public void destroy() {
+        subscription.unsubscribe();
+    }
 }
