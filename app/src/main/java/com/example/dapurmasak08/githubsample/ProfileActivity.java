@@ -1,5 +1,7 @@
 package com.example.dapurmasak08.githubsample;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -59,6 +61,11 @@ public class ProfileActivity extends ActionBarActivity {
     TextView starredLabel;
     @InjectView(R.id.followingLabel)
     TextView followingLabel;
+
+    public static void launch(Context context) {
+        Intent profile = new Intent(context, ProfileActivity.class);
+        context.startActivity(profile);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

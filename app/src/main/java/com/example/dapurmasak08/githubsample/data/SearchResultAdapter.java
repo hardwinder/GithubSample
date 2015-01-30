@@ -69,8 +69,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     private void checkIfEmpty() {
         if (getItemCount() <= 0) {
             Toast.makeText(context, R.string.no_search_result, Toast.LENGTH_LONG).show();
-            Intent profile = new Intent(context, ProfileActivity.class);
-            context.startActivity(profile);
+            ProfileActivity.launch(context);
         }
     }
 
