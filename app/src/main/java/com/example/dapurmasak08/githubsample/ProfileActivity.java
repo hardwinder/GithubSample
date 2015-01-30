@@ -1,6 +1,5 @@
 package com.example.dapurmasak08.githubsample;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -149,10 +148,6 @@ public class ProfileActivity extends ActionBarActivity {
     }
 
     private void submit(String query) {
-        // launch SearchResultActivity with query
-        Intent intent = new Intent(this, SearchResultActivity.class);
-        intent.putExtra("query", query);
-        startActivity(intent);
+        SearchResultActivity.launch(this, query);
     }
-
 }

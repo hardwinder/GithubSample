@@ -1,6 +1,8 @@
 package com.example.dapurmasak08.githubsample;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +13,15 @@ import com.example.dapurmasak08.githubsample.data.SearchResultAdapter;
  * Created by dapurmasak08 on 1/23/15.
  */
 public class SearchResultActivity extends Activity {
+    private static final String EXTRA_QUERY = "extra_query";
+
     private SearchResultAdapter adapter;
+
+    public static void launch(Context context, String query) {
+        Intent intent = new Intent(context, SearchResultActivity.class);
+        intent.putExtra(EXTRA_QUERY, query);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +41,7 @@ public class SearchResultActivity extends Activity {
         adapter = new SearchResultAdapter(this);
         recyclerView.setAdapter(adapter);
 
-        String query = getIntent().getStringExtra("query");
+        String query = getIntent().getStringExtra(EXTRA_QUERY);
         submit(query);
     }
 
