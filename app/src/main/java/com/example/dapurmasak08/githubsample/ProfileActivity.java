@@ -6,11 +6,13 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dapurmasak08.githubsample.data.GsonProvider;
 import com.rejasupotaro.octodroid.GitHub;
@@ -95,6 +97,12 @@ public class ProfileActivity extends ActionBarActivity {
                                 .load(user.getAvatarUrl())
                                 .into(userAvatar);
                         welcomeMessage.setVisibility(View.GONE);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Toast.makeText(ProfileActivity.this, R.string.error_message, Toast.LENGTH_SHORT).show();
+                        Log.e("DEBUG", throwable.getMessage());
                     }
                 });
     }
