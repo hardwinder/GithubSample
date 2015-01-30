@@ -3,6 +3,7 @@ package com.example.dapurmasak08.githubsample.data;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +56,12 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
                         }
                         notifyDataSetChanged();
                         checkIfEmpty();
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Toast.makeText(context, R.string.error_message, Toast.LENGTH_SHORT).show();
+                        Log.e("DEBUG", throwable.getMessage());
                     }
                 });
     }
