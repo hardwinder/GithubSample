@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.example.dapurmasak08.githubsample.data.SearchResultAdapter;
+import com.example.dapurmasak08.githubsample.views.DividerItemDecoration;
 
 /**
  * Created by dapurmasak08 on 1/23/15.
@@ -36,8 +37,8 @@ public class SearchResultActivity extends Activity {
         // use a linear layout manager
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this));
 
-        // specify an adapter (see also next example)
         adapter = new SearchResultAdapter(this);
         recyclerView.setAdapter(adapter);
 
