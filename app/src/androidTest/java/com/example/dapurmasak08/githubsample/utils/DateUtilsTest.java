@@ -7,6 +7,10 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 @RunWith(AndroidJUnit4.class)
 public class DateUtilsTest {
     @Test
@@ -21,7 +25,9 @@ public class DateUtilsTest {
         }
         {
             String formattedDateString = DateUtils.format("2015-03-22T15:15:14Z");
-            Assert.assertEquals("Mar 22, 2015", formattedDateString);
+            Calendar cal = GregorianCalendar.getInstance();
+            cal.set(2015, 2, 22);
+            Assert.assertEquals(DateFormat.getDateInstance(DateFormat.MEDIUM).format(cal.getTime()), formattedDateString);
         }
     }
 }
