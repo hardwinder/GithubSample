@@ -37,6 +37,8 @@ import rx.subscriptions.Subscriptions;
  * Created by dapurmasak08 on 1/22/15.
  */
 public class ProfileActivity extends ActionBarActivity {
+    private static final String EXTRA_USER = "extra_user";
+
     private Subscription subscription = Subscriptions.empty();
     private User user = new User();
     @InjectView(R.id.userName)
@@ -67,12 +69,21 @@ public class ProfileActivity extends ActionBarActivity {
         context.startActivity(profile);
     }
 
+    public static void launch(Context context, User user) {
+        String serializedUser = GsonProvider.get().toJson(user);
+
+        Intent intent = new Intent(context, ProfileActivity.class);
+        intent.putExtra(EXTRA_USER, serializedUser);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String serializedUser = getIntent().getStringExtra("user");
         setContentView(R.layout.activity_profile);
         ButterKnife.inject(this);
+
+        String serializedUser = getIntent().getStringExtra(EXTRA_USER);
         if (!TextUtils.isEmpty(serializedUser)) {
             bind(serializedUser);
         }
