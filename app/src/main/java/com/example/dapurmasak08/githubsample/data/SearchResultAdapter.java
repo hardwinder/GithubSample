@@ -1,5 +1,6 @@
 package com.example.dapurmasak08.githubsample.data;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dapurmasak08.githubsample.ProfileActivity;
 import com.example.dapurmasak08.githubsample.R;
@@ -31,22 +33,11 @@ import rx.functions.Action1;
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.SearchResultItemViewHolder> {
 
     private List<User> dataset = new ArrayList<>();
-
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public TextView mTextView;
-
-        public ViewHolder(TextView v) {
-            super(v);
-            mTextView = v;
-        }
-    }
+    private final Context context;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public SearchResultAdapter() {
+    public SearchResultAdapter(Context context) {
+        this.context = context;
     }
 
     public void update(String query) {
@@ -60,9 +51,19 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
                             dataset.add(user);
                         }
                         notifyDataSetChanged();
+                        checkIfEmpty();
                     }
                 });
     }
+
+    private void checkIfEmpty() {
+        if (getItemCount() <= 0) {
+            Toast.makeText( context, R.string.no_search_result, Toast.LENGTH_LONG).show();
+            Intent profile = new Intent(context, ProfileActivity.class);
+            context.startActivity(profile);
+        }
+    }
+
 
     // Create new views (invoked by the layout manager)
     @Override

@@ -30,7 +30,7 @@ public class SearchResultActivity extends Activity {
         recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
-        adapter = new SearchResultAdapter();
+        adapter = new SearchResultAdapter(this);
         recyclerView.setAdapter(adapter);
 
         String query = getIntent().getStringExtra("query");

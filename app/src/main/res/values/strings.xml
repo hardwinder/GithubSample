@@ -11,5 +11,5 @@
     <string name="label_repositories">Repositories</string>
     <string name="wait_for_response">Loading profile...</string>
     <string name="get_started">You may use the search bar above to get started</string>
-
+    <string name="no_search_result">No search result found...</string>
 </resources>
